@@ -67,7 +67,7 @@ have an extra machine done.
 # Closing thoughts
 I probably could have been ready to take this exam faster if I had been more diligent at the start of my studying. Neverless, I'm not sure if I could have passed on the first try if I did the 90 day subscription 
 (at least not without a fair amount of burnout). If you work full time, I would recommend the LearnOne subscription over the 90 day unless you already have a background in pentesting and are confident that you can
-move through the material quickly, or you are not currently working full time. 
+move through the material quickly. 
 
 ## Advice for the exam
 Take breaks or move to a different machine if you get really stuck during the exam, especially if you start to get frustrated. I spent more 

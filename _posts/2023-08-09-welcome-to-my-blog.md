@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Welcome to My Blog"
-date:   2023-08-09 22:16:10 -0400
+date:   2023-08-09 00:00:00 -0400
 desc: >
     Where I introduce myself
 ---
