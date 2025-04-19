@@ -1,0 +1,174 @@
+/* Custom CSS for crit0x90.github.io */
+
+/* Sidebar alignment */
+@media (min-width: 992px) {
+    .row > .col-lg-4 .card:first-child {
+        margin-top: 76px; /* Aligns with the top of the content after the date and title */
+    }
+}
+
+/* Global styles */
+body {
+    background-color: #121212;
+    color: #f5f5f5;
+    font-family: 'Courier New', monospace;
+}
+
+/* Navigation */
+.navbar {
+    background-color: #0a0a0a !important;
+    border-bottom: 1px solid #2bd03d;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #2bd03d !important;
+}
+
+.nav-link {
+    color: #e0e0e0 !important;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #2bd03d !important;
+}
+
+/* Prevent > symbols in navbar */
+.navbar-nav li::before {
+    content: none;
+}
+
+/* Cards */
+.card {
+    background-color: #1e1e1e;
+    border: 1px solid #2bd03d;
+    margin-bottom: 20px;
+    color: #f5f5f5;
+}
+
+.card-header {
+    background-color: #0a0a0a;
+    color: #2bd03d;
+    font-weight: bold;
+}
+
+.card-title {
+    color: #2bd03d;
+}
+
+.card-text, .card-body p, .card-body li {
+    color: #f5f5f5;
+}
+
+/* Links */
+a {
+    color: #2bd03d;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #18a828;
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #2bd03d;
+    border-color: #2bd03d;
+    color: #000000;
+}
+
+.btn-primary:hover {
+    background-color: #18a828;
+    border-color: #18a828;
+    color: #000000;
+}
+
+/* Code blocks */
+pre {
+    background-color: #0a0a0a;
+    color: #3cff55;
+    border: 1px solid #2bd03d;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+code {
+    background-color: #0a0a0a;
+    color: #3cff55;
+    padding: 2px 4px;
+}
+
+pre code {
+    border: none;
+    padding: 0;
+}
+
+/* Footer */
+footer {
+    background-color: #0a0a0a !important;
+    border-top: 1px solid #2bd03d;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: #2bd03d;
+}
+
+/* Terminal-like header effect */
+.navbar-brand::after {
+    content: "_";
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Post link styling */
+.post-link__title {
+    color: #2bd03d;
+    font-weight: bold;
+}
+
+.post-link__desc {
+    color: #f0f0f0;
+}
+
+/* List styling */
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+ul li {
+    color: #f5f5f5;
+}
+
+ul li::before {
+    content: "> ";
+    color: #2bd03d;
+}
+
+/* Command breakdown list */
+ul.command-breakdown li {
+    margin-bottom: 15px;
+}
+
+ul.command-breakdown code {
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+/* Blockquote styling */
+blockquote {
+    border-left: 3px solid #2bd03d;
+    padding-left: 15px;
+    color: #e8e8e8;
+}

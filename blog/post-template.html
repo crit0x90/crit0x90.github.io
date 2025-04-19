@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crit's Website</title>
+    <title>POST TITLE - crit's Website</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="assets/css/custom.css" rel="stylesheet">
+    <link href="../assets/css/custom.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">crit0x90</a>
+            <a class="navbar-brand" href="../index.html">crit0x90</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">> Home</a>
+                        <a class="nav-link" href="../index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog/index.html">Blog</a>
+                        <a class="nav-link active" href="index.html">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="../about.html">About</a>
                     </li>
                 </ul>
             </div>
@@ -39,26 +39,40 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8">
-                <h1 class="mb-4">Recent Posts</h1>
+                <!-- Date -->
+                <p class="text-muted">Posted on MONTH DAY, YEAR</p>
                 
-                <!-- Blog posts will be loaded here by JavaScript -->
-                <div id="blog-posts-container">
-                    <div class="text-center">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                <!-- Title -->
+                <h1 class="mt-4 mb-3">POST TITLE</h1>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- CONTENT GOES HERE -->
+                        <h2>Section Title</h2>
+                        <p>Your content here...</p>
+                        
+                        <!-- For code blocks -->
+                        <pre><code>your code here</code></pre>
+                        
+                        <!-- For images -->
+                        <div class="text-center mb-4">
+                            <img src="../assets/img/YOUR_IMAGE_PATH.jpg" alt="Image description" class="img-fluid border border-success">
+                            <p class="text-muted mt-2">Image caption</p>
                         </div>
-                        <p class="mt-2">Loading blog posts...</p>
                     </div>
                 </div>
             </div>
 
             <!-- Sidebar -->
             <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-header">About Me</div>
+                <div class="card">
+                    <div class="card-header">Tools Used</div>
                     <div class="card-body">
-                        <p>Welcome to my personal website. I'm a security professional sharing my experiences and knowledge about cybersecurity, penetration testing, and more.</p>
-                        <a href="about.html" class="btn btn-primary">Read More</a>
+                        <ul class="list-unstyled mb-0">
+                            <li>Tool 1</li>
+                            <li>Tool 2</li>
+                            <li>Tool 3</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -75,6 +89,6 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="assets/js/custom.js"></script>
+    <script src="../assets/js/custom.js"></script>
 </body>
 </html>

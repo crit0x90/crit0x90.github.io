@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Passing the hash through RDP",
+    "date": "2023-04-19",
+    "description": "Thoughts on AI assisted programming",
+    "url": "blog/AI-assisted-programming.html"
+  },
+  {
+    "title": "Passing the hash through RDP",
+    "date": "2023-08-29",
+    "description": "Learn how to perform a pass-the-hash attack through RDP.",
+    "url": "blog/passing-the-hash-rdp.html"
+  },
+  {
+    "title": "Passing the OSCP",
+    "date": "2023-08-12",
+    "description": "A breakdown of my experience preparing for and passing the OSCP certification.",
+    "url": "blog/passing-the-oscp.html"
+  },
+  {
+    "title": "Welcome to my blog",
+    "date": "2023-08-09",
+    "description": "First post on my new blog.",
+    "url": "blog/welcome-post.html"
+  }
+]
