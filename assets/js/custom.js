@@ -83,22 +83,25 @@ function loadBlogPosts() {
     // Hardcoded blog posts data (to avoid CORS issues when viewing locally)
     const posts = [
         {
-            "title": "Passing the hash through RDP",
-            "date": "2023-08-29",
-            "description": "Learn how to perform a pass-the-hash attack through RDP.",
-            "url": "blog/passing-the-hash-rdp.html"
+            title: "Passing the hash through RDP",
+            summary: "Learn how to perform a pass-the-hash attack through RDP.",
+            date: "2023-08-29",
+            url: "blog/passing-the-hash-rdp.html",
+            dateDisplay: "August 29, 2023"
         },
         {
-            "title": "Passing the OSCP",
-            "date": "2023-08-12",
-            "description": "A breakdown of my experience preparing for and passing the OSCP certification.",
-            "url": "blog/passing-the-oscp.html"
+            title: "BSidesSF 2025 Review",
+            summary: "Where I talk through what I learned at BSidesSF 2025.",
+            date: "2025-04-30",
+            url: "blog/BSidesSF-2025.html",
+            dateDisplay: "April 30, 2025"
         },
-        {
-            "title": "Welcome to my blog",
-            "date": "2023-08-09",
-            "description": "First post on my new blog.",
-            "url": "blog/welcome-post.html"
+            {
+            title: "LLM Hacking",
+            summary: "Where I talk through what I've learned from hacking LLMs.",
+            date: "2025-07-19",
+            url: "blog/LLM-Hacking.html",
+            dateDisplay: "July 19, 2025"
         }
     ];
     
@@ -123,8 +126,8 @@ function loadBlogPosts() {
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="card-title">${post.title}</h2>
-                    <p class="card-text">${post.description}</p>
-                    <div class="text-muted mb-3">Posted on ${formattedDate}</div>
+                    <p class="card-text">${post.summary}</p>
+                    <div class="card-text mb-3">Posted on ${formattedDate}</div>
                     <a href="${post.url}" class="btn btn-primary">Read More &rarr;</a>
                 </div>
             </div>
