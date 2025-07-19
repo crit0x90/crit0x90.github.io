@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking LLMs - crit's Website</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">crit0x90</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">> Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../about.html">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Date -->
+                <p class="text-muted">Posted on July 19, 2025</p>
+                
+                <!-- Title -->
+                <h1 class="mt-4 mb-3">Pentesting LLM Agents: Lessons learned in the field</h1>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p>
+                            As large language models become increasingly integrated into web apps and enterprise systems, they present a new 
+                            attack surface for security researchers. After spending considerable time pentesting LLM-powered applications, 
+                            I've discovered that breaking these systems requires a bit of a different mindset than traditional web application 
+                            testing, but with some social engineering skills it's really not that different than attacking traditional webapps.
+                        </p>
+                        <h2>It's webapp testing with a little extra social engineering</h2>
+                        <p>
+                            The first lesson that I learned is LLM pentesting is more akin to social engineering than technical exploitation—at least initially.
+                        </p>
+                        <p>
+                            Traditional web application testing often starts with technical probes: injecting payloads, fuzzing parameters, etc. With LLMs, your 
+                            first challenge isn't finding an XXS or SQL injection — it's convincing an artificial mind to do what you want it to do.
+                        </p>
+                        <p>
+                            Before you can abuse an LLM's capabilities, you need to navigate around the psychological and logical constraints that have been built into it. 
+                            This typically involves breaking it out of its intended operational boundaries, much like a social engineer might manipulate a helpful employee into 
+                            revealing sensitive information.
+                        </p>
+                        <h2>The power of pretext</h2>
+                        <p>
+                            In social engineering, pretext is everything. The same principle applies to LLM manipulation. A well-crafted pretext can still easily 
+                            jailbreak modern LLMs. The key is presenting your request in a context that makes the harmful or unintended behavior seem reasonable, 
+                            necessary, or benign. 
+                            Examples of effective pretexts include:
+                            <ul>
+                                <li>Academic research scenarios</li>
+                                <li>Hypothetical discussions</li>
+                                <li>Technical troubleshooting contexts</li>
+                            </ul>
+                            This is all assuming that you're trying to jailbreak an LLM that is otherwise unrestricted in what it can discuss. If you're attacking
+                            an LLM that is embedded in a webapp or something then these pretexts often won't work because the LLM is typically heavily restricted
+                            in what it can discuss.
+                        </p>
+                        <h2>Forget "Ignore previous instructions"</h2>
+                        <p>
+                            I've found that user-facing LLMs integrated into web applications are often heavily "lobotomized" — stripped of capabilities and loaded with 
+                            guardrails to prevent misuse. When you're attacking a web based LLM, your first task is to map out these guardrails and try to build a mental
+                            model of how restricted the LLM is, what it can and can't do, and what triggers it's security measures. 
+                        </p>
+                        <p>
+                            When you do this, you'll often want to start new sessions. From my experience, many LLMs seem to implement a kind of trust factor system
+                            where certain triggers will cause the LLM to trust you less. I've observed that you can pad your trust factor by conversing with the LLM
+                            about benign topics before you start your attack. This works especially well if you inch your way towards the information that you want.
+                            For example, if you want the LLM to give a list of the data sources that it has access to, you might start by asking it to cite the any 
+                            information that it gives you. Once it starts citing sources, you can ask it to include an index for the source which can help you iterativly
+                            identify the data sources that it has access to.
+                        </p>
+                        <p>
+                            This approach worked when I was working on the bug bounty program for Syfe. When I asked for the LLM to include a source index, it listed
+                            the data source as [4] Source name. I then asked it to tell me about source 0, 1, and so on.
+                        </p>
+
+                        <h2>Defense in depth: The multi-layered reality</h2>
+                        <p>
+                            Most LLM integrated apps don't rely on a single security control. Understanding this layered approach is crucial for comprehensive testing.
+                        </p>
+                        <h3>Input validation layer</h3>
+                        <p>
+                            The first layer of defence is often classifiers that scan incoming prompts for harmful content. This is the layer that will often determine
+                            your trust factor, especially at the start of a session. This is where it's particularly helpful to spend some time trying to identify 
+                            words or phrases that trigger the classifier. You'll typically know that you've found a trigger when the LLM gives you a canned response
+                            and refuses to answer the question. Beyond words and phrases, other things can trigger the classifier like trying to encode your prompt or
+                            using special characters.
+                        </p>
+
+                        <h3> Capability contraints</h3>
+                        <p>
+                            LLMs often have capability contraints that limit what they can do. When you test these constraints, it's helpful to try to get the LLM to
+                            differentiate between what it physically cannot do (it doesn't have access to the internet or tools to interact with it) and what it
+                            should not do (it isn't allow to do something but it could theoretically do it). 
+                        </p>
+
+                        <h3>Model level controls</h3>
+                        <p>
+                            When I was working through Microsoft's <a href="https://github.com/microsoft/AI-Red-Teaming-Playground-Labs">AI Red Teaming Playground</a>, 
+                            I found that even some of the easy introductory labs that were supposed to have no security controls were still detecting jailbreak attempts
+                            and ending my session. These were still easy to bypass, but it indicates that controls are being built directly into the models now which
+                            creates an additional challenge for pentesters.
+                        </p>
+
+                        <h3>Output filtering</h3>
+                        <p>
+                            Systems that scan the LLM's responses before presenting them to users. If you try to bypass this with a simple encoding trick, it will often
+                            get flagged so you'll need to be more creative.
+                        </p>
+
+                        <h3>Typical endpoint controls</h3>
+                        <p>
+                            Beyond all the security controls that are built into the LLM, you'll still find the typical infrastructure and webapp security controls.
+                            For example, when I was working on Amazon's bug bounty program, I was able to convice the LLM to make a request to my website. This would have been a great stepping
+                            stone to try some SSRF attacks, but as soon as the LLM made the request, it was like a new highly restricted session started. I assume that that outgoing request 
+                            (the LLM was not supposed to be able to query the internet) triggered a security control that cratered my trust factor and put me on probation.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">Tools Used</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li>Burpesuite</li>
+                            <li>web browser</li>
+                            <li>Claude AI</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark mt-5">
+        <div class="container">
+            <p class="m-0 text-center text-white">&copy; 2025 crit0x90</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
+</body>
+</html>

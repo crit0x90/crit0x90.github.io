@@ -28,7 +28,13 @@ const blogPosts = [
         url: "BSidesSF-2025.html",
         dateDisplay: "April 30, 2025"
     },
-
+        {
+        title: "LLM Hacking",
+        summary: "Where I talk through what I've learned from hacking LLMs.",
+        date: "2025-07-19",
+        url: "LLM-Hacking.html",
+        dateDisplay: "July 19, 2025"
+    },
     // Add new blog posts here
 ];
 
